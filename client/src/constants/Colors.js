@@ -1,7 +1,7 @@
 const defaultTheme = {
     p : '#00796b',
     pDark : '#004c40',
-    pLight : 'P — Light',
+    pLight : '#48a999',
     s : '#ff5722',
     sDark : '#c41c00',
     sLight : '#ff8a50',

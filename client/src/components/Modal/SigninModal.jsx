@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Modal from 'styled-react-modal'
+import { auth } from '../../services';
 
 const StyledModal = Modal.styled`
     padding : 1rem;
@@ -17,12 +18,14 @@ const Title = styled.h2`
 const Content = styled.div``;
 const Actions = styled.div``;
 
-const SigninModal = ({ ...props }) => {
+const SigninModal = ({ onCancel, ...props }) => {
     return (
         <StyledModal {...props}>
             <Title>Choose Acount</Title>
-            <Content>Content</Content>
-            <Actions>Actions</Actions>
+            <Content><button onClick={auth.loginByGoogle}>LOGIN</button></Content>
+            <Actions>
+                <button onClick={onCancel}>CANCEL</button>
+            </Actions>
         </StyledModal>
     )
 }

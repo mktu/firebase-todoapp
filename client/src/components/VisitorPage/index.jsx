@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ContainedButton } from '../Button';
-import {SigninModal} from '../Modal';
+import { SigninModal } from '../Modal';
+import { ThemeContext } from '../../contexts';
 
-const Wrapper = styled.div`
-`;
+const Wrapper = styled.div(({ theme }) =>`
+    background-color: ${theme.bgcolor};
+`);
 
 const Title = styled.h2`
     text-align : center;
@@ -25,22 +27,30 @@ const ActionButton = styled(ContainedButton).attrs({
     margin-right : 1rem;
 `;
 
-const Home = ({ ...props }) => {
+const VisitorPage = ({ ...props }) => {
     const [showLogin, setShowLogin] = useState(false);
+    const theme = useContext(ThemeContext);
+
+    const toggleModal = (show) => () => {
+        setShowLogin(show);
+    };
     return (
-        <Wrapper>
+        <Wrapper theme={theme}>
             <Title>Select mode</Title>
             <ButtonWrapper>
                 <ActionButton>
                     START WITH ANONUMOUS
                     </ActionButton>
-                <ActionButton onClick={()=>{setShowLogin(true)}}>
+                <ActionButton onClick={toggleModal(true)}>
                     START WITH LOGIN
                     </ActionButton>
             </ButtonWrapper>
-            <SigninModal isOpen={showLogin} onBackgroundClick={()=>{setShowLogin(false)}} />
+            <SigninModal
+                isOpen={showLogin}
+                onCancel={toggleModal(false)}
+                onBackgroundClick={toggleModal(false)} />
         </Wrapper>
     )
 }
 
-export default Home;
+export default VisitorPage;
