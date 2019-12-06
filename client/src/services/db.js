@@ -36,3 +36,23 @@ export function addTodo(todoName, user) {
             console.error(error)
         });
 }
+
+export function modifyTodo(todo) {
+    const { id, ...data } = todo;
+    db.collection('todos').doc(id).set({
+        ...data,
+        lastUpdate: Date.now()
+    }, { merge: true })
+        .catch(function (error) {
+            console.error(error)
+        });
+}
+
+export function deleteTodo(todo) {
+    db.collection('todos')
+        .doc(todo.id)
+        .delete()
+        .catch(function (error) {
+            console.error(error);
+        });
+}
