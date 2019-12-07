@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ThemeContext, AuthContext } from '../../contexts';
 import Header from '../Header/index';
@@ -19,26 +19,18 @@ const FooterLayout = styled.div(({ theme }) => `
 
 
 const MainPage = ({ ...props }) => {
+    const user = useContext(AuthContext);
+    const theme = useContext(ThemeContext);
     return (
-        <ThemeContext.Consumer>
-            {value => (
-                <AuthContext.Consumer>
-                    {user =>
-                        (
-                            <Router>
-                                <Wrapper>
-                                    <Header />
-                                    <Switch>
-                                        <Route path='/' exact component={user?TodoPage:VisitorPage} />
-                                    </Switch>
-                                    <FooterLayout theme={value}>footer</FooterLayout>
-                                </Wrapper>
-                            </Router>
-                        )
-                    }
-                </AuthContext.Consumer>
-            )}
-        </ThemeContext.Consumer>
+        <Router>
+            <Wrapper>
+                <Header />
+                <Switch>
+                    <Route path='/' exact component={user.uid ? TodoPage : VisitorPage} />
+                </Switch>
+                <FooterLayout theme={theme}>footer</FooterLayout>
+            </Wrapper>
+        </Router>
     )
 }
 

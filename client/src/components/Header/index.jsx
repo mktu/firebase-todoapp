@@ -1,6 +1,9 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { ThemeContext } from '../../contexts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TextButton as TextButtonBase } from '../Button';
+import { ThemeContext, AuthContext } from '../../contexts';
+import { auth } from '../../services';
 
 const Wrapper = styled.header(({ theme }) => `
     background-color: ${theme.p};
@@ -17,23 +20,57 @@ const Title = styled.h1`
 `;
 const Menu = styled.div`
      display : flex;
+     align-items : center;
      & > div{
         margin-left : 1rem;
      }
 `;
 
+const TextButton = styled(TextButtonBase).attrs(
+    {
+        color: 'onPrimary'
+    }
+)`
+    ${({isSignIn})=> isSignIn ? `
+        font-size : 1.2rem;
+    ` : `
+        font-size : 1.5rem;
+    `}
+    
+`;
+
+const UserIcon = styled(FontAwesomeIcon)(({theme})=>`
+    margin-right : 0.5rem;
+    color : ${theme.onP};
+`);
+
 const Header = ({ ...props }) => {
     const theme = useContext(ThemeContext);
+    const user = useContext(AuthContext);
     return (
         <Wrapper theme={theme}>
             <Title>TODO APP</Title>
             <Menu>
-                <div>
-                    Sign up
-                </div>
-                <div>
-                    Login
-                </div>
+                {user.uid ? (
+                    <React.Fragment>
+                        <div>
+                            <UserIcon icon={['fas', 'user']}/>
+                            {user.displayName}
+                        </div>
+                        <div>
+                            <TextButton onClick={()=>{
+                                auth.logout();
+                            }} isSignIn={true}>LOG OUT</TextButton>
+                        </div>
+                    </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                        <div>
+                            <TextButton isSignIn={false}>LOGIN</TextButton>
+                        </div>
+                    </React.Fragment>
+                )}
+
             </Menu>
         </Wrapper>
     )

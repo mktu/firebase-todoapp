@@ -42,7 +42,7 @@ const VisitorPage = ({ ...props }) => {
                     START WITH ANONUMOUS
                     </ActionButton>
                 <ActionButton onClick={toggleModal(true)}>
-                    START WITH LOGIN
+                    START WITH SIGN UP
                     </ActionButton>
             </ButtonWrapper>
             <SigninModal
