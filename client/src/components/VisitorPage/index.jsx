@@ -46,6 +46,7 @@ const VisitorPage = ({ ...props }) => {
                     </ActionButton>
             </ButtonWrapper>
             <SigninModal
+                title='Choose a provider for sign-in'
                 isOpen={showLogin}
                 onCancel={toggleModal(false)}
                 onBackgroundClick={toggleModal(false)} />

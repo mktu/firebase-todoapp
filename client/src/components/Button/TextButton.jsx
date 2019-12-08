@@ -39,11 +39,21 @@ const OnSecondary= styled(Base)(({ theme }) => `
     color : ${theme.onS};
 `);
 
+const TextPrimary = styled(Base)(({ theme }) => `
+    color : ${theme.textP};
+`);
+
+const TextSecondary = styled(Base)(({ theme }) => `
+    color : ${theme.textS};
+`);
+
 const Buttons = {
     primary: Primary,
     secondary: Secondary,
     onPrimary: OnPrimary,
-    onSecondary: OnSecondary
+    onSecondary: OnSecondary,
+    textPrimary: TextPrimary,
+    textSecondary: TextSecondary
 };
 
 const TextButton = ({ className, color = 'primary', ...props }) => {

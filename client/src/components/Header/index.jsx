@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextButton as TextButtonBase } from '../Button';
 import { ThemeContext, AuthContext } from '../../contexts';
+import { SigninModal } from '../Modal';
 import { auth } from '../../services';
 
 const Wrapper = styled.header(({ theme }) => `
@@ -31,15 +32,10 @@ const TextButton = styled(TextButtonBase).attrs(
         color: 'onPrimary'
     }
 )`
-    ${({isSignIn})=> isSignIn ? `
-        font-size : 1.2rem;
-    ` : `
-        font-size : 1.5rem;
-    `}
-    
+    font-size : 1.2rem;
 `;
 
-const UserIcon = styled(FontAwesomeIcon)(({theme})=>`
+const UserIcon = styled(FontAwesomeIcon)(({ theme }) => `
     margin-right : 0.5rem;
     color : ${theme.onP};
 `);
@@ -47,6 +43,8 @@ const UserIcon = styled(FontAwesomeIcon)(({theme})=>`
 const Header = ({ ...props }) => {
     const theme = useContext(ThemeContext);
     const user = useContext(AuthContext);
+    const [showLogin, setShowLogin] = useState(false);
+    const toggleShowLogin = (show) => ()=> {setShowLogin(show)};
     return (
         <Wrapper theme={theme}>
             <Title>TODO APP</Title>
@@ -54,24 +52,29 @@ const Header = ({ ...props }) => {
                 {user.uid ? (
                     <React.Fragment>
                         <div>
-                            <UserIcon icon={['fas', 'user']}/>
+                            <UserIcon icon={['fas', 'user']} />
                             {user.displayName}
                         </div>
                         <div>
-                            <TextButton onClick={()=>{
+                            <TextButton onClick={() => {
                                 auth.logout();
-                            }} isSignIn={true}>LOG OUT</TextButton>
+                            }} >LOG OUT</TextButton>
                         </div>
                     </React.Fragment>
                 ) : (
-                    <React.Fragment>
-                        <div>
-                            <TextButton isSignIn={false}>LOGIN</TextButton>
-                        </div>
-                    </React.Fragment>
-                )}
+                        <React.Fragment>
+                            <div>
+                                <TextButton onClick={toggleShowLogin(true)}>LOGIN</TextButton>
+                            </div>
+                        </React.Fragment>
+                    )}
 
             </Menu>
+            <SigninModal
+                title='Choose a provider for log in'
+                isOpen={showLogin}
+                onCancel={toggleShowLogin(false)}
+                onBackgroundClick={toggleShowLogin(false)} />
         </Wrapper>
     )
 }
