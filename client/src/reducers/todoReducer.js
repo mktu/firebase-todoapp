@@ -1,7 +1,16 @@
 const initialState = [];
 
+const createActions = dispatch => ({
+    init : () => dispatch({type:'init'}),
+    added: todo => dispatch({ type: 'added', payload: { todo } }),
+    removed: todo => dispatch({ type: 'removed', payload: { todo } }),
+    modified: todo => dispatch({ type: 'modified', payload: { todo } }),
+  });
+
 const reducer = (state, action) => {
     switch (action.type) {
+        case 'init' : 
+            return [...initialState];
         case 'added':
             return [...state, action.payload.todo];
         case 'removed':
@@ -15,5 +24,6 @@ const reducer = (state, action) => {
 
 export default {
     initialState,
-    reducer
+    reducer,
+    createActions
 };

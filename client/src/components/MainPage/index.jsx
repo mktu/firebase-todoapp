@@ -18,15 +18,15 @@ const FooterLayout = styled.div(({ theme }) => `
 `);
 
 
-const MainPage = ({ ...props }) => {
-    const user = useContext(AuthContext);
+const MainPage = () => {
+    const {userState} = useContext(AuthContext);
     const theme = useContext(ThemeContext);
     return (
         <Router>
             <Wrapper>
                 <Header />
                 <Switch>
-                    <Route path='/' exact component={user.uid ? TodoPage : VisitorPage} />
+                    <Route path='/' exact component={userState.user ? TodoPage : VisitorPage} />
                 </Switch>
                 <FooterLayout theme={theme}>footer</FooterLayout>
             </Wrapper>

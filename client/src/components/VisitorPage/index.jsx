@@ -2,7 +2,9 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ContainedButton } from '../Button';
 import { SigninModal } from '../Modal';
+import { ErrorModal } from '../Modal';
 import { ThemeContext } from '../../contexts';
+import { useVisitorState } from '../../hooks';
 
 const Wrapper = styled.div(({ theme }) =>`
     background-color: ${theme.bgcolor};
@@ -28,28 +30,35 @@ const ActionButton = styled(ContainedButton).attrs({
 `;
 
 const VisitorPage = ({ ...props }) => {
-    const [showLogin, setShowLogin] = useState(false);
     const theme = useContext(ThemeContext);
-
-    const toggleModal = (show) => () => {
-        setShowLogin(show);
-    };
+    const [modalState,loginError,loginState] = useVisitorState();
     return (
         <Wrapper theme={theme}>
             <Title>Select mode</Title>
             <ButtonWrapper>
-                <ActionButton>
+                <ActionButton onClick={()=>{
+                    loginState.anonymous();
+                }}>
                     START WITH ANONUMOUS
                     </ActionButton>
-                <ActionButton onClick={toggleModal(true)}>
+                <ActionButton onClick={modalState.set(true)}>
                     START WITH SIGN UP
                     </ActionButton>
             </ButtonWrapper>
+            <ErrorModal
+                mainMessage={'Error'}
+                detailMessage={loginError.hasError&&loginError.error.message}
+                isOpen={loginError.hasError}
+                onClose={loginError.refresh}
+                />
             <SigninModal
                 title='Choose a provider for sign-in'
-                isOpen={showLogin}
-                onCancel={toggleModal(false)}
-                onBackgroundClick={toggleModal(false)} />
+                isOpen={modalState.value}
+                onCancel={modalState.set(false)}
+                onClickGoogle={()=>{
+                    loginState.login();
+                }}
+                onBackgroundClick={modalState.set(false)} />
         </Wrapper>
     )
 }

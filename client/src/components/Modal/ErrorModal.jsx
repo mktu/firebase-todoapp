@@ -1,10 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import Modal from 'styled-react-modal'
-import { FontAwesomeIcon as FontAwesomeIconBase } from '@fortawesome/react-fontawesome';
-import { TextButton as TextButtonBase, ContainedButton as ContainedButtonBase } from '../Button';
+import { TextButton as TextButtonBase } from '../Button';
 import { Fadein } from '../Animation';
-import { auth } from '../../services';
 
 const StyledModal = Modal.styled`
     display : grid;
@@ -42,33 +40,20 @@ const TextButton = styled(TextButtonBase).attrs({
     font-size : 1rem;
 `;
 
-const LoginButton = styled(ContainedButtonBase)`
-    font-size : 1.2rem;
-    width : 100%;
-    background-color : #4285F4;
-`;
-
-const FontAwesomeIcon = styled(FontAwesomeIconBase)`
-    margin-right : 1rem;
-`;
-
-const SigninModal = ({ title, onClickGoogle, onCancel, ...props }) => {
+const ErrorModal = ({ mainMessage, detailMessage,onClickGoogle, onClose, ...props }) => {
     return (
         <StyledModal {...props}>
-            <Title>{title}</Title>
+            <Title>{mainMessage}</Title>
             <Content>
                 <div>
-                    <LoginButton onClick={onClickGoogle}>
-                        <FontAwesomeIcon icon={['fab', 'google']} />
-                        <span>Google</span>
-                    </LoginButton>
+                    {detailMessage}
                 </div>
             </Content>
             <Actions>
-                <TextButton onClick={onCancel}>CANCEL</TextButton>
+                <TextButton onClick={onClose}>OK</TextButton>
             </Actions>
         </StyledModal>
     )
 }
 
-export default SigninModal;
+export default ErrorModal;

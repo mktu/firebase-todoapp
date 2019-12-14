@@ -1,58 +1,52 @@
 import firebase from './firebase';
-
+import { defaultErrorHandller } from '../utils';
 const db = firebase.firestore();
 
-export async function registListener(dispatch, user) {
-    const dispatchTodo = (type, todo) => {
-        dispatch({
-            type, payload: {
-                todo
-            }
-        });
-    }
+export function registListener(onAdded, onModified, onDeleted, user) {
     return db.collection('todos').where('uid', '==', user.uid)
         .onSnapshot(function (querySnapshot) {
             for (let change of querySnapshot.docChanges()) {
                 let todo = Object.assign({ id: change.doc.id }, change.doc.data());
                 if (change.type === 'added') {
-                    dispatchTodo('added', todo);
+                    onAdded(todo);
                 }
                 else if (change.type === 'modified') {
-                    dispatchTodo('modified', todo);
+                    onModified(todo);
                 }
                 else if (change.type === 'removed') {
-                    dispatchTodo('removed', todo)
+                    onDeleted(todo)
                 }
             }
         })
 }
-
-export function addTodo(todoName, user) {
+export function addTodo(
+    todoName,
+    user,
+    onFailed = defaultErrorHandller
+) {
     db.collection('todos').add({
         uid: user.uid,
         name: todoName,
     })
-        .catch(function (error) {
-            console.error(error)
-        });
+        .catch(onFailed);
 }
-
-export function modifyTodo(todo) {
+export function modifyTodo(
+    todo,
+    onFailed = defaultErrorHandller
+) {
     const { id, ...data } = todo;
     db.collection('todos').doc(id).set({
         ...data,
         lastUpdate: Date.now()
     }, { merge: true })
-        .catch(function (error) {
-            console.error(error)
-        });
+        .catch(onFailed);
 }
-
-export function deleteTodo(todo) {
+export function deleteTodo(
+    todo,
+    onFailed = defaultErrorHandller
+) {
     db.collection('todos')
         .doc(todo.id)
         .delete()
-        .catch(function (error) {
-            console.error(error);
-        });
+        .catch(onFailed);
 }

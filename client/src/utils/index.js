@@ -1,0 +1,1 @@
+export const defaultErrorHandller = (error) => { console.error(error) };

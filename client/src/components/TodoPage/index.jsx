@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect, useReducer } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { db } from '../../services';
 import { TextInput } from '../Input';
 import ToDoRawBase from '../TodoRow';
-import { todoReducer } from '../../reducers';
 import { ThemeContext, AuthContext } from '../../contexts';
+import useTodoState from '../../hooks/useTodoState';
 
 const Wrapper = styled.div(({ theme }) => `
     background-color: ${theme.bgcolor};
@@ -37,39 +36,36 @@ const TodoRow = styled(ToDoRawBase)`
     margin-bottom : 1rem;
 `;
 
-const TodoPage = ({ ...props }) => {
+const TodoPage = () => {
     const theme = useContext(ThemeContext);
-    const user = useContext(AuthContext);
-    const [todos, dispatch] = useReducer(todoReducer.reducer, todoReducer.initialState);
-    const [inputTodo, setInputTodo] = useState('');
-    useEffect(() => {
-        if (user && user.uid) {
-            db.registListener(dispatch, user);
-        }
-    }, [user]);
+    const { userState } = useContext(AuthContext);
+    const [todoState, inputState] = useTodoState(userState.user);
     return (
         <Wrapper theme={theme}>
             <Title>Add Todo</Title>
             <Body>
                 <TodoInput
-                    value={inputTodo}
+                    value={inputState.value}
                     onChange={(e) => {
-                        setInputTodo(e.target.value);
+                        inputState.set(e.target.value);
                     }}
                     onEnter={() => {
-                        db.addTodo(inputTodo, user);
-                        setInputTodo('');
+                        todoState.add(inputState.value);
+                        inputState.set('');
                     }}
                     label='INPUT TODO'
                 />
                 <TodoListPanel>
-                    {todos.map(todo => {
+                    {todoState.values.map(todo => {
                         return (
-                            <TodoRow key={todo.id} iconsize='1.5rem' todo={todo} onChange={(newTodo) => {
-                                db.modifyTodo(newTodo);
-                            }} onDelete={() => {
-                                db.deleteTodo(todo);
-                            }} />
+                            <TodoRow
+                                key={todo.id}
+                                iconsize='1.5rem'
+                                todo={todo}
+                                onChange={todoState.modify}
+                                onDelete={() => {
+                                    todoState.delete(todo);
+                                }} />
                         )
                     })}
                 </TodoListPanel>

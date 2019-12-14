@@ -13,13 +13,13 @@ import MainPage from './components/MainPage/index';
 library.add(faCheckSquare,faSquare,faSolidSquare,faTrashAlt,faUser,faGoogle)
 
 function App() {
-  const [state, dispatch] = useReducer(authReducer.reducer,authReducer.initialState);
+  const [userState, dispatch] = useReducer(authReducer.reducer,authReducer.initialState);
   useEffect(()=>{
     return auth.listenAuthState(dispatch);
   },[]);
   return (
     <ThemeContext.Provider value={defaultTheme}>
-      <AuthContext.Provider value={state}>
+      <AuthContext.Provider value={{userState,actions:authReducer.createActions(dispatch)}}>
         <ModalProvider>
           <MainPage />
         </ModalProvider>
