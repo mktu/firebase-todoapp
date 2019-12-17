@@ -4,7 +4,6 @@ import Modal from 'styled-react-modal'
 import { FontAwesomeIcon as FontAwesomeIconBase } from '@fortawesome/react-fontawesome';
 import { TextButton as TextButtonBase, ContainedButton as ContainedButtonBase } from '../Button';
 import { Fadein } from '../Animation';
-import { auth } from '../../services';
 
 const StyledModal = Modal.styled`
     display : grid;

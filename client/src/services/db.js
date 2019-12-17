@@ -1,5 +1,5 @@
 import firebase from './firebase';
-import { defaultErrorHandller } from '../utils';
+import { consoleError } from '../utils';
 const db = firebase.firestore();
 
 export function registListener(onAdded, onModified, onDeleted, user) {
@@ -22,7 +22,7 @@ export function registListener(onAdded, onModified, onDeleted, user) {
 export function addTodo(
     todoName,
     user,
-    onFailed = defaultErrorHandller
+    onFailed = consoleError
 ) {
     db.collection('todos').add({
         uid: user.uid,
@@ -32,7 +32,7 @@ export function addTodo(
 }
 export function modifyTodo(
     todo,
-    onFailed = defaultErrorHandller
+    onFailed = consoleError
 ) {
     const { id, ...data } = todo;
     db.collection('todos').doc(id).set({
@@ -43,7 +43,7 @@ export function modifyTodo(
 }
 export function deleteTodo(
     todo,
-    onFailed = defaultErrorHandller
+    onFailed = consoleError
 ) {
     db.collection('todos')
         .doc(todo.id)

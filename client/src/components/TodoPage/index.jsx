@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { TextInput } from '../Input';
 import ToDoRawBase from '../TodoRow';
-import { ThemeContext, AuthContext } from '../../contexts';
+import { ThemeContext } from '../../contexts';
 import useTodoState from '../../hooks/useTodoState';
 
 const Wrapper = styled.div(({ theme }) => `
@@ -38,34 +38,26 @@ const TodoRow = styled(ToDoRawBase)`
 
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
-    const { userState } = useContext(AuthContext);
-    const [todoState, inputState] = useTodoState(userState.user);
+    const {newItemState, todoListState} = useTodoState();
     return (
         <Wrapper theme={theme}>
             <Title>Add Todo</Title>
             <Body>
                 <TodoInput
-                    value={inputState.value}
-                    onChange={(e) => {
-                        inputState.set(e.target.value);
-                    }}
-                    onEnter={() => {
-                        todoState.add(inputState.value);
-                        inputState.set('');
-                    }}
+                    value={newItemState.current}
+                    onChange={newItemState.handleChange}
+                    onEnter={newItemState.handleSubmit}
                     label='INPUT TODO'
                 />
                 <TodoListPanel>
-                    {todoState.values.map(todo => {
+                    {todoListState.todos.map(todo => {
                         return (
                             <TodoRow
                                 key={todo.id}
                                 iconsize='1.5rem'
                                 todo={todo}
-                                onChange={todoState.modify}
-                                onDelete={() => {
-                                    todoState.delete(todo);
-                                }} />
+                                onChange={todoListState.handleChange}
+                                onDelete={todoListState.handleDelete} />
                         )
                     })}
                 </TodoListPanel>

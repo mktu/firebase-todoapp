@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextButton as TextButtonBase } from '../Button';
 import { ErrorModal } from '../Modal';
-import { ThemeContext, AuthContext } from '../../contexts';
+import { ThemeContext } from '../../contexts';
 import { SigninModal } from '../Modal';
 import { useHeaderState } from '../../hooks';
 
@@ -41,73 +41,58 @@ const UserIcon = styled(FontAwesomeIcon)(({ theme }) => `
     color : ${theme.onP};
 `);
 
-const renderUserMenu = (user, onClick, loginMediator) => {
+const Header = () => {
+    const theme = useContext(ThemeContext);
+    const { signinModalState, errorModalState, user } = useHeaderState();
+    
+    let menu = null;
     if (user === null) {
-        return (
-            <React.Fragment>
-                <div>
-                    <TextButton onClick={onClick(true)}>LOGIN</TextButton>
-                </div>
-            </React.Fragment>
-        )
+        menu = (<div><TextButton onClick={signinModalState.show}>LOGIN</TextButton></div>)
     }
-    if (user.isAnonymous) {
-        return (
+    else if (user.isAnonymous) {
+        menu = (
             <React.Fragment>
                 <div>
                     <UserIcon icon={['fas', 'user']} />
                     <span>Anonymous User</span>
                 </div>
                 <div>
-                    <TextButton onClick={onClick(true)}>LOGIN</TextButton>
+                    <TextButton onClick={signinModalState.show}>LOGIN</TextButton>
                 </div>
             </React.Fragment>
         )
     }
-    return (
+    else {
+        menu = (
         <React.Fragment>
             <div>
                 <UserIcon icon={['fas', 'user']} />
                 {user.displayName}
             </div>
             <div>
-                <TextButton onClick={() => {
-                    loginMediator.logout();
-                }} >LOG OUT</TextButton>
+                <TextButton onClick={signinModalState.han} >LOG OUT</TextButton>
             </div>
-        </React.Fragment>
-    );
-}
-const Header = () => {
-    const theme = useContext(ThemeContext);
-    const {userState,actions} = useContext(AuthContext);
-    const {user} = userState;
-    const [modalState,loginError,loginMediator] = useHeaderState(user,actions.login);
+        </React.Fragment>)
+    }
+
     return (
         <Wrapper theme={theme}>
             <Title>TODO APP</Title>
             <Menu>
-                {renderUserMenu(user, modalState.onClick, loginMediator)}
+                {menu}
             </Menu>
             <ErrorModal
                 mainMessage={'Error'}
-                detailMessage={loginError.hasError&&loginError.error.message}
-                isOpen={loginError.hasError}
-                onClose={loginError.refresh}
-                />
+                detailMessage={errorModalState.message}
+                isOpen={errorModalState.hasError}
+                onClose={errorModalState.handleClose}
+            />
             <SigninModal
                 title={'Choose a provider for log in'}
-                isOpen={modalState.value && !loginError.hasError}
-                onClickGoogle={()=>{
-                    if(!user.isAnonymous){
-                        loginMediator.login();
-                    }
-                    else{
-                        loginMediator.link();
-                    }
-                }}
-                onCancel={modalState.onClick(false)}
-                onBackgroundClick={modalState.onClick(false)} />
+                isOpen={signinModalState.isOpen}
+                onClickGoogle={signinModalState.handleGoogoleLogin}
+                onCancel={signinModalState.hide}
+                onBackgroundClick={signinModalState.hide} />
         </Wrapper>
     )
 }

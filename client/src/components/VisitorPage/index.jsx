@@ -31,34 +31,30 @@ const ActionButton = styled(ContainedButton).attrs({
 
 const VisitorPage = ({ ...props }) => {
     const theme = useContext(ThemeContext);
-    const [modalState,loginError,loginState] = useVisitorState();
+    const {signinModalState, errorModalState} = useVisitorState();
     return (
         <Wrapper theme={theme}>
             <Title>Select mode</Title>
             <ButtonWrapper>
-                <ActionButton onClick={()=>{
-                    loginState.anonymous();
-                }}>
+                <ActionButton onClick={signinModalState.handleAnonymousLogin}>
                     START WITH ANONUMOUS
                     </ActionButton>
-                <ActionButton onClick={modalState.set(true)}>
+                <ActionButton onClick={signinModalState.show}>
                     START WITH SIGN UP
                     </ActionButton>
             </ButtonWrapper>
             <ErrorModal
                 mainMessage={'Error'}
-                detailMessage={loginError.hasError&&loginError.error.message}
-                isOpen={loginError.hasError}
-                onClose={loginError.refresh}
+                detailMessage={errorModalState.message}
+                isOpen={errorModalState.isOpen}
+                onClose={errorModalState.handleClose}
                 />
             <SigninModal
                 title='Choose a provider for sign-in'
-                isOpen={modalState.value}
-                onCancel={modalState.set(false)}
-                onClickGoogle={()=>{
-                    loginState.login();
-                }}
-                onBackgroundClick={modalState.set(false)} />
+                isOpen={signinModalState.isOpen}
+                onCancel={signinModalState.handleClose}
+                onClickGoogle={signinModalState.handleGoogoleLogin}
+                onBackgroundClick={signinModalState.handleClose} />
         </Wrapper>
     )
 }

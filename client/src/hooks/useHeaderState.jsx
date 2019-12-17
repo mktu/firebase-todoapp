@@ -1,27 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { auth } from '../services';
+import { AuthContext } from '../contexts';
 import { useErrorState } from '.';
 
-export default function(user,onLinkSucceeded){
+export default function () {
     const [showLogin, setShowLogin] = useState(false);
-    const errorState = useErrorState();
-    useEffect(()=>{
-        setShowLogin(false);
-    },[user]);
-    return [{
-        value : showLogin,
-        onClick : value => () =>{setShowLogin(value)}
-    },
-    errorState,
-    {
-        login : ()=>{
-            auth.loginByGoogle(errorState.setError);
+    const { userState, actions } = useContext(AuthContext);
+    const { user } = userState;
+    const { setError, hasError, error, refresh } = useErrorState();
+
+    const signinModalState = {
+        handleGoogoleLogin: () => {
+            if (!user.isAnonymous) {
+                auth.loginByGoogle(setError);
+            }
+            else {
+                auth.linkWithGoogle((user) => {
+                    setShowLogin(false);
+                    actions.login(user);
+                }, setError)
+            }
         },
-        logout : ()=>{
-            auth.logout(errorState.setError);
+        handleLogout: () => {
+            auth.logout(() => {
+                setShowLogin(false);
+            }, setError);
         },
-        link:()=>{
-            auth.linkWithGoogle(onLinkSucceeded,errorState.setError);
-        }
-    }];
+        isOpen: showLogin && !hasError,
+        hide: () => { setShowLogin(false); },
+        show: () => { setShowLogin(true); },
+    };
+
+    const errorModalState = {
+        hasError,
+        message: hasError && error.message,
+        handleClose: () => { refresh() }
+    }
+
+    return { signinModalState, errorModalState, user };
 }

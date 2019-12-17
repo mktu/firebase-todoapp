@@ -38,7 +38,7 @@ const TodoRow = ({ className, iconsize='1rem', todo, onChange, onDelete, ...prop
                 })
             }} label={todo.name} />
             <IconButtons>
-                <IconButton onClick={onDelete}>
+                <IconButton onClick={()=>{onDelete(todo)}}>
                     <TrashIcon iconsize={iconsize} icon={['far', 'trash-alt']} />
                 </IconButton>
             </IconButtons>

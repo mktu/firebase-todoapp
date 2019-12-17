@@ -1,9 +1,8 @@
 import firebase from './firebase';
-import {defaultErrorHandller} from '../utils';
+import {consoleError,consoleLogger} from '../utils';
 
 export const listenAuthState = (dispatch) => {
     return firebase.auth().onAuthStateChanged(function (user) {
-        console.log(user)
         if (user) {
             // User is signed in.
             dispatch({
@@ -23,15 +22,15 @@ export const listenAuthState = (dispatch) => {
 }
 
 export const loginByGoogle = (
-    onFailed = defaultErrorHandller
+    onFailed = consoleError
 ) => {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).catch(onFailed);
 }
 
 export const linkWithGoogle = (
-    onSucceeded = defaultErrorHandller,
-    onFailed = defaultErrorHandller
+    onSucceeded,
+    onFailed = consoleError
 ) => {
     const provider = new firebase.auth.GoogleAuthProvider();
     const curUser = firebase.auth().currentUser;
@@ -46,13 +45,15 @@ export const linkWithGoogle = (
 }
 
 export const loginWithAnonymous = (
-    onFailed = defaultErrorHandller
+    onSucceeded = consoleLogger,
+    onFailed = consoleError
 ) => {
-    firebase.auth().signInAnonymously().catch(onFailed);
+    firebase.auth().signInAnonymously().then(onSucceeded).catch(onFailed);
 }
 
 export const logout = (
-    onFailed = defaultErrorHandller
+    onSucceeded = consoleLogger,
+    onFailed = consoleError
 ) => {
-    firebase.auth().signOut().catch(onFailed);
+    firebase.auth().signOut().then(onSucceeded).catch(onFailed);
 }
