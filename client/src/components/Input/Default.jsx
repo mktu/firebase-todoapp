@@ -1,5 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import getThemeColor from './Color';
+import {useTextInputState} from '../../hooks';
 import { ThemeContext } from '../../contexts';
 
 const Wrapper = styled.div(({ color }) => `
@@ -12,7 +14,7 @@ const Input = styled.input(({ color }) => `
     display:block;
     border:none;
     color : ${color.inputColor};
-    border-bottom:1px solid ${color.dividerColor};
+    border-bottom:1px solid ${color.barColor};
     &:focus{
         outline:none;
         color : ${color.inputFocusColor};
@@ -60,34 +62,15 @@ const Bar = styled.div(({ color, focus, valid }) => `
     }
 `);
 
-const getThemeColor = (theme) => {
-    return {
-        primary: {
-            labelColor: theme.textS,
-            inputColor: theme.textS,
-            focusLabelColor: theme.p,
-            inputFocusColor: theme.textP,
-            barColor: theme.p,
-            textColor: theme.textP,
-            dividerColor: theme.pLight
-        },
-        secondary: {
-            labelColor: theme.textS,
-            inputColor: theme.textS,
-            focusLabelColor: theme.s,
-            inputFocusColor: theme.textP,
-            barColor: theme.s,
-            textColor: theme.textS,
-            dividerColor: theme.sLight
-        }
-    };
-}
-
-const TextInput = ({ className, onChange, onEnter, value, label, color = 'primary', ...props }) => {
-    const [focus, setFocus] = useState(false);
-    const [valid, setValid] = useState(false);
+const Default = ({ className, onChange, onEnter, value, label, color = 'primary', ...props }) => {
+    const {
+        valid, 
+        focus, 
+        toggeFocus, 
+        handleChange, 
+        handleKeyPress,
+    } = useTextInputState({onChange,onEnter,value});
     const themeContext = useContext(ThemeContext);
-    const toggeFocus = (isFocus) => () => { setFocus(isFocus) };
     const themeColor = getThemeColor(themeContext)[color];
     return (
         <Wrapper className={className} color={themeColor} {...props} >
@@ -100,25 +83,15 @@ const TextInput = ({ className, onChange, onEnter, value, label, color = 'primar
                 id='input'
                 color={themeColor}
                 value={value}
-                onChange={(e) => {
-                    setValid(Boolean(e.target.value));
-                    onChange && onChange(e);
-                }}
+                onChange={handleChange}
                 onFocus={toggeFocus(true)}
                 onBlur={toggeFocus(false)}
                 type='text'
-                onKeyPress={(e) => {
-                    if (e.key.toLowerCase() === 'enter') {
-                        if (onEnter) {
-                            onEnter(e);
-                            e.preventDefault(); // for disable onChange event.
-                        }
-                    }
-                }}
+                onKeyPress={handleKeyPress}
             />
             <Bar color={themeColor} valid={valid} focus={focus} />
         </Wrapper>
     );
 }
 
-export default TextInput;
+export default Default;

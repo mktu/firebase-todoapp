@@ -27,11 +27,13 @@ const TrashIcon = styled(FontAwesomeIcon)(({iconsize})=>`
     font-size : ${iconsize};
 `);
 
-const TodoRow = ({ className, iconsize='1rem', todo, onChange, onDelete, ...props }) => {
+const TodoRow = ({ className, iconsize='1rem', todo, onChange, handleJump, onDelete, ...props }) => {
     const checked = Boolean(todo.checked);
     return (
         <Wrapper className={className}>
-            <CheckboxBlock checked={checked} onCheck={() => {
+            <CheckboxBlock checked={checked} onClick={()=>{
+                handleJump(todo)
+            }} onCheck={() => {
                 onChange({
                     ...todo,
                     checked: !checked,

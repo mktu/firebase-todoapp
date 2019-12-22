@@ -5,9 +5,10 @@ import { TextButton as TextButtonBase } from '../Button';
 import { ErrorModal } from '../Modal';
 import { ThemeContext } from '../../contexts';
 import { SigninModal } from '../Modal';
+import Paper from '../Paper';
 import { useHeaderState } from '../../hooks';
 
-const Wrapper = styled.header(({ theme }) => `
+const Wrapper = styled(Paper)(({ theme }) => `
     background-color: ${theme.p};
     color : ${theme.onP};
     display : flex;

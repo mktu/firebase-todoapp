@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
+import { useParams,useHistory } from "react-router-dom";
 import { db } from '../services';
 import { AuthContext } from '../contexts';
 import { todoReducer } from '../reducers';
@@ -6,6 +7,8 @@ import { todoReducer } from '../reducers';
 export default function () {
     const { userState } = useContext(AuthContext);
     const { user } = userState;
+    const { todoId } = useParams();
+    let history = useHistory();
     const [todos, dispatch] = useReducer(todoReducer.reducer, todoReducer.initialState);
     const [inputTodo, setInputTodo] = useState('');
     useEffect(() => {
@@ -41,8 +44,12 @@ export default function () {
         handleDelete: (todo) => {
             db.deleteTodo(todo);
         },
+        handleJump: (todo) =>{
+            history.push(todo.id);
+        },
         todos
     }
 
-    return { newItemState, todoListState }
+    const selected = todos.find(todo=>todo.id===todoId);
+    return { newItemState, todoListState, selected }
 }

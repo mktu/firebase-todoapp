@@ -51,7 +51,7 @@ const Checkmark = styled(FontAwesomeIcon)(({ checked, theme }) => `
     }
 `);
 
-const Checkbox = ({ className, label, checked, onCheck }) => {
+const Checkbox = ({ className, label, checked, onCheck, onClick }) => {
     const faCheckmark = checked ? 'check-square' : 'square';
     const theme = useContext(ThemeContext);
     return (
@@ -60,7 +60,7 @@ const Checkbox = ({ className, label, checked, onCheck }) => {
                 <Input onChange={onCheck} />
                 <Checkmark theme={theme} icon={['far', faCheckmark]} />
             </Label>
-            <Text checked={checked} theme={theme}>{label}</Text>
+            <Text onClick={onClick} checked={checked} theme={theme}>{label}</Text>
         </Wrapper>
     )
 };

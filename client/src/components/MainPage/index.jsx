@@ -6,12 +6,14 @@ import VisitorPage from '../VisitorPage';
 import TodoPage from '../TodoPage';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div(({ theme }) => `
+    background-color: ${theme.bgcolor};
     display : grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
     min-height : 100vh;
-`;
+`);
+
 const FooterLayout = styled.div(({ theme }) => `
     background-color: ${theme.p};
     color : ${theme.onP};
@@ -19,15 +21,20 @@ const FooterLayout = styled.div(({ theme }) => `
 
 
 const MainPage = () => {
-    const {userState} = useContext(AuthContext);
+    const { userState } = useContext(AuthContext);
     const theme = useContext(ThemeContext);
     return (
         <Router>
-            <Wrapper>
+            <Wrapper theme={theme}>
                 <Header />
-                <Switch>
-                    <Route path='/' exact component={userState.user ? TodoPage : VisitorPage} />
-                </Switch>
+                {userState.user ? (
+                    <Switch>
+                        <Route path='/' exact component={TodoPage} />
+                        <Route path="/:todoId"><TodoPage /></Route>
+                    </Switch>
+                ):(
+                    <VisitorPage/>
+                )}
                 <FooterLayout theme={theme}>footer</FooterLayout>
             </Wrapper>
         </Router>
