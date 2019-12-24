@@ -5,6 +5,7 @@ import { ThemeContext } from '../../contexts';
 const Button = styled.button(({ theme }) => `
     border : none;
     cursor : pointer;
+    background-color : transparent;
     color : ${theme.textS};
     &:hover{
         color : ${theme.textP};

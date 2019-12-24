@@ -30,7 +30,7 @@ const TodoInput = styled(TextInput)`
     }
 `;
 
-const TodoListPanel = styled(Paper)(({theme})=>`
+const TodoListPanel = styled(Paper)(({ theme }) => `
     background-color: ${theme.surface};
     font-size : 1.5rem;
 `);
@@ -57,16 +57,17 @@ const TodoPage = () => {
                         return (
                             <TodoRow
                                 key={todo.id}
-                                iconsize='1.5rem'
+                                iconsize='1rem'
                                 todo={todo}
                                 handleJump={todoListState.handleJump}
                                 onChange={todoListState.handleChange}
                                 onDelete={todoListState.handleDelete} />
+
                         )
                     })}
                 </TodoListPanel>
-                <TodoDetail todo={selected} onChange={todoListState.handleChange}/>
-                
+                <TodoDetail todo={selected} onChange={todoListState.handleChange} />
+
             </Body>
         </Wrapper>
     )
