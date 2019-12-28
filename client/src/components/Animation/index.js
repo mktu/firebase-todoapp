@@ -12,5 +12,30 @@ const Fadein = keyframes`
   }
 `;
 
+const SlideIn = (direction = 0, amount = '20px') => {
+  if (direction > 0) {
+    const inverted = `-${amount}`;
+    return keyframes`
+      from {
+        transform: translateY(${inverted});
+      }
 
-export {Fadein}
+      to {
+        transform: translateY(0);
+      }
+    `;
+  }
+  return keyframes`
+    from {
+      transform: translateY(${amount});
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  `;
+};
+
+
+
+export { Fadein,SlideIn }

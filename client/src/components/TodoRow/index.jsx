@@ -6,20 +6,23 @@ import { Fadein } from '../Animation';
 import { IconButton } from '../Button';
 import ListItem, { SecondaryAction, PrimaryAction } from '../List/ListItem';
 
-const Wrapper = styled(ListItem)`
-    ${css`
-        animation : 0.8s ${Fadein};
-    `}
+const fadein = css`
+animation : 0.8s ${Fadein};
 `;
+
+const Wrapper = styled(ListItem)`
+    ${fadein};
+`;
+
 
 const TrashIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
     font-size : ${iconsize};
 `);
 
-const TodoRow = ({ className, iconsize = '1rem', todo, onChange, handleJump, onDelete, ...props }) => {
+const TodoRow = ({ className, listProps, iconsize = '1rem', todo, onChange, handleJump, onDelete }) => {
     const checked = Boolean(todo.checked);
     return (
-        <Wrapper className={className} onClick={() => {
+        <Wrapper {...listProps} className={className} onClick={() => {
             handleJump(todo)
         }} >
             <PrimaryAction>

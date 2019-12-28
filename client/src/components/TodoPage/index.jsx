@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import TextInput from '../Input';
 import ToDoRawBase from '../TodoRow';
 import TodoDetail from '../TodoDetail';
+import {List} from '../List';
 import { ThemeContext } from '../../contexts';
 import Paper from '../Paper';
 import useTodoState from '../../hooks/useTodoState';
@@ -35,6 +36,9 @@ const TodoListPanel = styled(Paper)(({ theme }) => `
     font-size : 1.5rem;
 `);
 
+const ToDoList = styled(List)`
+`;
+
 const TodoRow = styled(ToDoRawBase)`
     padding : 1rem;
 `;
@@ -53,18 +57,20 @@ const TodoPage = () => {
                         onEnter={newItemState.handleSubmit}
                         label='INPUT TODO'
                     />
-                    {todoListState.todos.map(todo => {
-                        return (
+                    <ToDoList items={todoListState.todos}>
+                    {
+                        (todo,listProps)=>(
                             <TodoRow
                                 key={todo.id}
                                 iconsize='1rem'
                                 todo={todo}
+                                listProps={listProps}
                                 handleJump={todoListState.handleJump}
                                 onChange={todoListState.handleChange}
                                 onDelete={todoListState.handleDelete} />
-
                         )
-                    })}
+                    }
+                    </ToDoList>
                 </TodoListPanel>
                 <TodoDetail todo={selected} onChange={todoListState.handleChange} />
 
