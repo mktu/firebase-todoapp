@@ -4,6 +4,7 @@ import useHeaderState from './useHeaderState';
 import useTodoState from './useTodoState';
 import useTextInputState from './useTextInputState';
 import useMultiLineTextInputState from './useMultiLineTextInputState';
+import useDnDList from './useDnDList';
 
 export {
     useErrorState,
@@ -11,5 +12,6 @@ export {
     useHeaderState,
     useTodoState,
     useTextInputState,
-    useMultiLineTextInputState
+    useMultiLineTextInputState,
+    useDnDList
 };

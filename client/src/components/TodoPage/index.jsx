@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useContext, useMemo } from 'react';
+import styled from 'styled-components';
 import TextInput from '../Input';
 import ToDoRawBase from '../TodoRow';
 import TodoDetail from '../TodoDetail';
@@ -45,7 +45,7 @@ const TodoRow = styled(ToDoRawBase)`
 
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
-    const { newItemState, todoListState, selected } = useTodoState();
+    const { newItemState, todoState, todos, selected, sorter, handleSort } = useTodoState();
     return (
         <Wrapper theme={theme}>
             <Body>
@@ -57,22 +57,22 @@ const TodoPage = () => {
                         onEnter={newItemState.handleSubmit}
                         label='INPUT TODO'
                     />
-                    <ToDoList items={todoListState.todos}>
+                    <ToDoList items={todos} onSort={handleSort} sorter={sorter}>
                     {
-                        (todo,listProps)=>(
-                            <TodoRow
-                                key={todo.id}
-                                iconsize='1rem'
-                                todo={todo}
-                                listProps={listProps}
-                                handleJump={todoListState.handleJump}
-                                onChange={todoListState.handleChange}
-                                onDelete={todoListState.handleDelete} />
-                        )
+                        useMemo(()=>{
+                            return (todo)=>(
+                                <TodoRow
+                                    iconsize='1rem'
+                                    todo={todo}
+                                    handleJump={todoState.handleJump}
+                                    onChange={todoState.handleChange}
+                                    onDelete={todoState.handleDelete} />
+                            )
+                        },[todoState])
                     }
                     </ToDoList>
                 </TodoListPanel>
-                <TodoDetail todo={selected} onChange={todoListState.handleChange} />
+                <TodoDetail todo={selected} onChange={todoState.handleChange} />
 
             </Body>
         </Wrapper>

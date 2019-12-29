@@ -50,3 +50,15 @@ export function deleteTodo(
         .delete()
         .catch(onFailed);
 }
+
+export function updateTodos(
+    todos,
+    onFailed = consoleError
+) {
+    let batch = db.batch();
+    for (const todo of todos) {
+        const ref = db.collection('todos').doc(todo.id);
+        batch.update(ref, todo);
+    }
+    batch.commit().catch(onFailed);
+}
