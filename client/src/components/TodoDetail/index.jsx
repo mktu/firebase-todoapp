@@ -1,8 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext,forwardRef } from 'react';
 import styled from 'styled-components';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { ThemeContext } from '../../contexts';
 import TextInput from '../Input';
 import Paper from '../Paper';
+import {useTodoDetailState} from '../../hooks';
 
 const Wrapper = styled(Paper)`
     transition-duration: 1s;
@@ -34,8 +37,8 @@ const TitleInput = styled(TextInput).attrs({
 
 const Detail = styled(TextInput).attrs({
     variant: 'multiline',
-    minRows : 5,
-    maxRows : 10
+    minRows: 5,
+    maxRows: 10
 })`
     margin-top : 1rem;
     & > textarea {
@@ -46,48 +49,65 @@ const Detail = styled(TextInput).attrs({
     }
 `;
 
+const DateWrapper = styled.div`
+    margin-top : 1rem;
+    display : flex;
+    align-items : center;
+`;
+
+const DateTextInput = styled(TextInput).attrs({
+    variant: 'contained',
+})`
+    width : 100%;
+    
+    & > input {
+        font-size : 1.5rem;
+    }
+`;
+
+const DateCustomInput = forwardRef((props, _ref) =>{
+    return <DateTextInput ref={_ref} {...props}/>
+});
+
 const TodoDetail = ({ className, todo, onChange }) => {
     const theme = useContext(ThemeContext);
-    const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState('');
-    useEffect(() => {
-        if(todo){
-            const {name='',detail=''} = todo;
-            setTitle(name);
-            setDetail(detail);
-        }
-    }, [todo])
+    const {
+        title,
+        handleTitleInputChange,
+        handleTitleInputBlur,
+        detail,
+        handleDetailInputChange,
+        handleDetailInputBlur,
+        dueDate,
+        handleChangeDueDate
+    } = useTodoDetailState({todo,onChange});
     return (
         <Wrapper className={className} theme={theme} hasTodo={Boolean(todo)}>
             {todo && (
                 <div>
                     <TitleInput
-                        onChange={(e) => {
-                            setTitle(e.target.value)
-                        }}
+                        onChange={handleTitleInputChange}
                         label='Title'
                         value={title}
-                        onBlur={() => {
-                            todo.name !== title &&
-                                onChange({
-                                    ...todo,
-                                    name: title
-                                })
-                        }}
+                        onBlur={handleTitleInputBlur}
                     />
+                    <DateWrapper>
+                        <DatePicker
+                            selected={dueDate}
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            dateFormat="yyyy/MM/dd-h:mm aa"
+                            isClearable
+                            customInput={<DateCustomInput label='Due Date' />}
+                            onChange={handleChangeDueDate} />
+                    </DateWrapper>
+
                     <Detail
-                        onChange={(e) => {
-                            setDetail(e.target.value)
-                        }}
+                        onChange={handleDetailInputChange}
                         label='Detail'
                         value={detail}
-                        onBlur={() => {
-                            todo.detail !== detail &&
-                                onChange({
-                                    ...todo,
-                                    detail: detail
-                                })
-                        }}
+                        onBlur={handleDetailInputBlur}
                     />
                 </div>
 

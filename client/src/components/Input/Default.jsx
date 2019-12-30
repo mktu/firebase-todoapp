@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,forwardRef } from 'react';
 import styled from 'styled-components';
 import getThemeColor from './Color';
 import {useTextInputState} from '../../hooks';
@@ -62,7 +62,7 @@ const Bar = styled.div(({ color, focus, valid }) => `
     }
 `);
 
-const Default = ({ className, onChange, onEnter, value, label, color = 'primary', ...props }) => {
+const Default = forwardRef(({ className, onChange, onEnter, value, label, color = 'primary', ...props },_ref) => {
     const {
         valid, 
         focus, 
@@ -75,12 +75,11 @@ const Default = ({ className, onChange, onEnter, value, label, color = 'primary'
     return (
         <Wrapper className={className} color={themeColor} {...props} >
             <Label
-                id='label'
                 color={themeColor}
                 valid={valid}
                 focus={focus}>{label}</Label>
             <Input
-                id='input'
+                ref={_ref}
                 color={themeColor}
                 value={value}
                 onChange={handleChange}
@@ -92,6 +91,6 @@ const Default = ({ className, onChange, onEnter, value, label, color = 'primary'
             <Bar color={themeColor} valid={valid} focus={focus} />
         </Wrapper>
     );
-}
+})
 
 export default Default;

@@ -26,7 +26,7 @@ const Body = styled.div`
 
 const TodoInput = styled(TextInput)`
     width : 400px;
-    & > #input, & > #label {
+    & > input, & > label {
         font-size : 1.5rem;
     }
 `;

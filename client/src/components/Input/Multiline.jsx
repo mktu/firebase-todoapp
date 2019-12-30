@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, forwardRef } from 'react';
 import styled from 'styled-components';
 import { ThemeContext } from '../../contexts';
 import {useMultiLineTextInputState} from '../../hooks';
@@ -38,7 +38,7 @@ const Label = styled.label(({ color, focus, valid }) => `
     background-color:white;
 `);
 
-const MultiLine = ({ className, onChange, onBlur, value, label, minRows, maxRows, color = 'primary', ...props }) => {
+const MultiLine = forwardRef(({ className, onChange, onBlur, value, label, minRows, maxRows, color = 'primary', ...props },_ref) => {
     const {
         ref, 
         currentRows,
@@ -47,7 +47,7 @@ const MultiLine = ({ className, onChange, onBlur, value, label, minRows, maxRows
         toggeFocus, 
         handleChange, 
         handleLabelClick
-    } = useMultiLineTextInputState({onBlur,value, onChange,minRows,maxRows});
+    } = useMultiLineTextInputState({ref:_ref, onBlur,value, onChange,minRows,maxRows});
     const themeContext = useContext(ThemeContext);
     const themeColor = getThemeColor(themeContext)[color];
     return (
@@ -78,6 +78,6 @@ const MultiLine = ({ className, onChange, onBlur, value, label, minRows, maxRows
             />
         </Wrapper>
     );
-}
+})
 
 export default MultiLine;

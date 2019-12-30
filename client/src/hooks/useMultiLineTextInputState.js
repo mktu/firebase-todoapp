@@ -19,9 +19,9 @@ const adjustRowSize = ({ target, maxRows, minRows }) => {
     return currentRows < maxRows ? currentRows : maxRows;
 };
 
-export default ({ minRows = 1, maxRows = 5, value, ...otherProps }) => {
+export default ({ ref : _ref, minRows = 1, maxRows = 5, value, ...otherProps }) => {
     const [currentRows, setCurrentRows] = useState(minRows);
-    const { ref, handleChange: handleChangeBase, ...other } = useTextInputState({ value, ...otherProps });
+    const { ref, handleChange: handleChangeBase, ...other } = useTextInputState({ ref : _ref, value, ...otherProps });
 
     useEffect(() => {
         // There is a bug that height can not be obtained at the first render

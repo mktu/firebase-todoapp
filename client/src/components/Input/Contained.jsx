@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,forwardRef } from 'react';
 import styled from 'styled-components';
 import { ThemeContext } from '../../contexts';
 import useTextInputState from '../../hooks/useTextInputState';
@@ -33,6 +33,7 @@ const Label = styled.label(({ color, focus, valid }) => `
     font-weight:normal;
     transition:0.5s all; 
     cursor : text;
+    white-space : nowrap;
     ${(focus || valid) && `
         position:absolute;
         pointer-events:none;
@@ -44,7 +45,7 @@ const Label = styled.label(({ color, focus, valid }) => `
     `}
 `);
 
-const Contained = ({ className, onChange, onBlur, onEnter, value, label, color = 'primary', ...props }) => {
+const Contained = forwardRef(({ className, onChange, onBlur, onEnter, value, label, color = 'primary', ...props },_ref,) => {
     const {
         ref, 
         valid, 
@@ -53,7 +54,7 @@ const Contained = ({ className, onChange, onBlur, onEnter, value, label, color =
         handleChange, 
         handleKeyPress,
         handleLabelClick
-    } = useTextInputState({onBlur,value, onChange,onEnter});
+    } = useTextInputState({onBlur,ref:_ref,value, onChange,onEnter});
     const themeContext = useContext(ThemeContext);
     const themeColor = getThemeColor(themeContext)[color];
     return (
@@ -64,7 +65,6 @@ const Contained = ({ className, onChange, onBlur, onEnter, value, label, color =
             color={themeColor}
             {...props} >
             <Label
-                id='label'
                 color={themeColor}
                 valid={valid}
                 onClick={handleLabelClick}
@@ -72,7 +72,6 @@ const Contained = ({ className, onChange, onBlur, onEnter, value, label, color =
                 {label}
             </Label>
             <Input
-                id='input'
                 ref={ref}
                 color={themeColor}
                 value={value}
@@ -84,6 +83,6 @@ const Contained = ({ className, onChange, onBlur, onEnter, value, label, color =
             />
         </Wrapper>
     );
-}
+});
 
 export default Contained;

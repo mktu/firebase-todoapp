@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 
-export default function ({value,onChange,onBlur,onEnter}) {
+export default function ({value,ref : _ref, onChange,onBlur,onEnter}) {
     const [focus, setFocus] = useState(false);
     const valid = Boolean(value);
-    const ref = useRef(null);
+    const ref = _ref ? _ref : useRef(null);
     const toggeFocus = (isFocus) => () => { 
         setFocus(isFocus);
         !isFocus && onBlur && onBlur() 
@@ -23,7 +23,7 @@ export default function ({value,onChange,onBlur,onEnter}) {
     }
 
     const handleLabelClick = ()=>{
-        ref.current.focus();
+        !_ref && ref.current.focus();
     }
 
     return { ref, focus, valid, handleChange, toggeFocus, handleKeyPress, handleLabelClick };
