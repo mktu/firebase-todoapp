@@ -15,6 +15,7 @@ const CustomIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
 
 const SecondaryText = styled(Text)(({isPastDueDate})=>`
     font-size : 1rem;
+    margin-top : 0.3rem;
     ${isPastDueDate && `
         color : red;
     `}
@@ -22,7 +23,6 @@ const SecondaryText = styled(Text)(({isPastDueDate})=>`
 
 const TodoRow = ({ className, iconsize = '1rem', todo, onChange, handleJump, onDelete }) => {
     const {checked, handleClickItem, handleCheck, isPastDueDate, handleDelete,dueDateStr } = useTodoRowState({todo,handleJump,onChange,onDelete});
-    
     return useMemo(() => {
         return (
             <Wrapper className={className} onClick={handleClickItem}>

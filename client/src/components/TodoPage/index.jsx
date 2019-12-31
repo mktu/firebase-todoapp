@@ -15,11 +15,6 @@ const Wrapper = styled.div`
     align-items:center;
 `;
 
-const Title = styled.h3`
-    text-align : center;
-    margin-bottom : 1rem;
-`;
-
 const TodoMenuItems = styled(TodoMenuItemsBase)`
     font-size : 1.2rem;
     padding : 0.9rem;
@@ -33,6 +28,7 @@ const Body = styled.div`
 
 const TodoInput = styled(TextInput)`
     width : 400px;
+    margin-top : 1rem;
     & > input, & > label {
         font-size : 1.5rem;
     }
@@ -43,10 +39,11 @@ const TodoListPanel = styled(Paper)(({ theme }) => `
     font-size : 1.2rem;
 `);
 
-const ToDoList = styled(List)`
+const ToDoList = styled(List)(({ theme }) => `
     overflow : scroll;
-    height : 55vh;
-`;
+    height : 60vh;
+    border-bottom : 1px solid ${theme.divider};
+`);
 
 const TodoRow = styled(ToDoRawBase)`
     padding : 1rem;
@@ -54,20 +51,27 @@ const TodoRow = styled(ToDoRawBase)`
 
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
-    const { newItemState, todoState, todos, selected, sorter, handleSort, handleSortByDate } = useTodoState();
+    const { 
+        newItemState, 
+        todoState, 
+        todos, 
+        selected, 
+        sorter, 
+        handleSort, 
+        handleSortByDate,
+        deleteCompletedList
+    } = useTodoState();
     return (
         <Wrapper theme={theme}>
             <Body>
                 <TodoListPanel theme={theme}>
-                    <Title>Add Todo</Title>
                     <TodoInput
                         value={newItemState.current}
                         onChange={newItemState.handleChange}
                         onEnter={newItemState.handleSubmit}
                         label='Input Todo'
                     />
-                    <TodoMenuItems handleSort={handleSortByDate}/>
-                    <ToDoList items={todos} onSort={handleSort} sorter={sorter}>
+                    <ToDoList items={todos} onSort={handleSort} sorter={sorter} theme={theme}>
                     {
                         useMemo(()=>{
                             return (todo)=>(
@@ -81,6 +85,7 @@ const TodoPage = () => {
                         },[todoState])
                     }
                     </ToDoList>
+                    <TodoMenuItems handleSort={handleSortByDate} deleteCompletedList={deleteCompletedList}/>
                 </TodoListPanel>
                 <TodoDetail todo={selected} onChange={todoState.handleChange} />
 

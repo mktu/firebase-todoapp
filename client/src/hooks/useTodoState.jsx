@@ -82,6 +82,19 @@ export default function () {
         })));
     }
 
+    const deleteCompletedList = () =>{
+        db.deleteTodos(todos.filter(todo=>todo.checked));
+    }
+
     const selected = todos.find(todo=>todo.id===todoId);
-    return { newItemState, todoState, todos, handleSort, sorter, selected, handleSortByDate }
+    return { 
+        newItemState, 
+        todoState, 
+        todos, 
+        handleSort, 
+        sorter, 
+        selected, 
+        handleSortByDate, 
+        deleteCompletedList 
+    };
 }
