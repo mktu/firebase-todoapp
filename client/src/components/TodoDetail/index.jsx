@@ -61,7 +61,7 @@ const DateTextInput = styled(TextInput).attrs({
     width : 100%;
     
     & > input {
-        font-size : 1.5rem;
+        font-size : 1.2rem;
     }
 `;
 

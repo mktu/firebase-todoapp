@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
+import { useState, useContext, useEffect, useReducer, useMemo, useCallback } from 'react';
 import { useParams,useHistory } from "react-router-dom";
 import { db } from '../services';
 import { AuthContext } from '../contexts';
@@ -67,6 +67,21 @@ export default function () {
         };
     },[history])
 
+    const handleSortByDate = ()=>{
+        const listWithDueDate = todos.filter(todo=>Boolean(todo.dueDate));
+        const listWithoutDueDate = todos.filter(todo=>!Boolean(todo.dueDate));
+        const sorted = listWithDueDate.sort((i1,i2)=>{
+            const i1date = new Date(i1.dueDate);
+            const i2Date = new Date(i2.dueDate);
+            return i1date - i2Date;
+        });
+        const newList = [...sorted,...listWithoutDueDate];
+        db.updateTodos(newList.map((todo,i)=>({
+            ...todo,
+            index : i
+        })));
+    }
+
     const selected = todos.find(todo=>todo.id===todoId);
-    return { newItemState, todoState, todos, handleSort, sorter, selected }
+    return { newItemState, todoState, todos, handleSort, sorter, selected, handleSortByDate }
 }

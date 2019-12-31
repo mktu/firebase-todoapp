@@ -14,7 +14,7 @@ const CustomIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
 `);
 
 const SecondaryText = styled(Text)(({isPastDueDate})=>`
-    font-size : 1.2rem;
+    font-size : 1rem;
     ${isPastDueDate && `
         color : red;
     `}

@@ -6,6 +6,7 @@ import TodoDetail from '../TodoDetail';
 import {List} from '../List';
 import { ThemeContext } from '../../contexts';
 import Paper from '../Paper';
+import TodoMenuItemsBase from '../TodoMenuItems';
 import useTodoState from '../../hooks/useTodoState';
 
 const Wrapper = styled.div`
@@ -18,6 +19,12 @@ const Title = styled.h3`
     text-align : center;
     margin-bottom : 1rem;
 `;
+
+const TodoMenuItems = styled(TodoMenuItemsBase)`
+    font-size : 1.2rem;
+    padding : 0.9rem;
+`;
+
 const Body = styled.div`
     display : flex;
     justify-content: start;
@@ -33,8 +40,7 @@ const TodoInput = styled(TextInput)`
 
 const TodoListPanel = styled(Paper)(({ theme }) => `
     background-color: ${theme.surface};
-    font-size : 1.5rem;
-    
+    font-size : 1.2rem;
 `);
 
 const ToDoList = styled(List)`
@@ -48,7 +54,7 @@ const TodoRow = styled(ToDoRawBase)`
 
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
-    const { newItemState, todoState, todos, selected, sorter, handleSort } = useTodoState();
+    const { newItemState, todoState, todos, selected, sorter, handleSort, handleSortByDate } = useTodoState();
     return (
         <Wrapper theme={theme}>
             <Body>
@@ -60,9 +66,7 @@ const TodoPage = () => {
                         onEnter={newItemState.handleSubmit}
                         label='Input Todo'
                     />
-                    <div>
-                        menus{/** <TodoMenuItems></TodoMenuItems> */}
-                    </div>
+                    <TodoMenuItems handleSort={handleSortByDate}/>
                     <ToDoList items={todos} onSort={handleSort} sorter={sorter}>
                     {
                         useMemo(()=>{
