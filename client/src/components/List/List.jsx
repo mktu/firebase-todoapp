@@ -6,10 +6,10 @@ import {useDnDList} from '../../hooks';
 const Wrapper = styled.div`
 `;
 
-const List = ({ items = [], onSort, sorter=(i1,i2)=>i1-i2, children }) => {
+const List = ({ className, items = [], onSort, sorter=(i1,i2)=>i1-i2, children }) => {
     const {onDrop,sortedItems} = useDnDList(items,sorter,onSort);
     return (
-        <Wrapper >
+        <Wrapper className={className}>
             <Container onDrop={onDrop}>
                 {
                     useMemo(()=>{

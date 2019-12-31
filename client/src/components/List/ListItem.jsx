@@ -16,7 +16,15 @@ const Wrapper = styled.div(({ theme }) => `
     }
 `);
 
-const ListItem = ({ className, children, ...props }) => {
+export const PrimaryAction = styled.div`
+    margin-right : 1rem;
+`;
+
+export const SecondaryAction = styled.div`
+    margin-left : 1rem;
+`;
+
+const ListItem = ({ className, primaryAction, secondaryAction, primaryText, secondaryText, children, ...props }) => {
     const theme = useContext(ThemeContext);
     return (
         <Wrapper className={className} theme={theme} {...props}>
@@ -25,13 +33,5 @@ const ListItem = ({ className, children, ...props }) => {
 
     );
 }
-
-export const PrimaryAction = styled.div`
-    margin-right : 1rem;
-`;
-
-export const SecondaryAction = styled.div`
-    margin-left : 1rem;
-`;
 
 export default ListItem;

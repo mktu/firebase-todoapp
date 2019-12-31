@@ -6,6 +6,7 @@ import useTextInputState from './useTextInputState';
 import useMultiLineTextInputState from './useMultiLineTextInputState';
 import useDnDList from './useDnDList';
 import useTodoDetailState from './useTodoDetailState';
+import useTodoRowState from './useTodoRowState';
 
 export {
     useErrorState,
@@ -15,5 +16,6 @@ export {
     useTextInputState,
     useMultiLineTextInputState,
     useDnDList,
-    useTodoDetailState
+    useTodoDetailState,
+    useTodoRowState
 };

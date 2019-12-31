@@ -4,42 +4,46 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box as CheckBox, Text } from '../Checkbox';
 import { IconButton } from '../Button';
 import ListItem, { SecondaryAction, PrimaryAction } from '../List/ListItem';
-
+import {useTodoRowState} from '../../hooks';
 
 const Wrapper = styled(ListItem)`
 `;
 
-const TrashIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
+const CustomIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
     font-size : ${iconsize};
 `);
 
+const SecondaryText = styled(Text)(({isPastDueDate})=>`
+    font-size : 1.2rem;
+    ${isPastDueDate && `
+        color : red;
+    `}
+`);
+
 const TodoRow = ({ className, iconsize = '1rem', todo, onChange, handleJump, onDelete }) => {
-    const checked = Boolean(todo.checked);
+    const {checked, handleClickItem, handleCheck, isPastDueDate, handleDelete,dueDateStr } = useTodoRowState({todo,handleJump,onChange,onDelete});
+    
     return useMemo(() => {
         return (
-            <Wrapper className={className} onClick={() => {
-                handleJump(todo)
-            }} >
+            <Wrapper className={className} onClick={handleClickItem}>
                 <PrimaryAction>
-                    <CheckBox checked={checked} onCheck={(e) => {
-                        onChange({
-                            ...todo,
-                            checked: !checked,
-                        });
-                    }} />
+                    <CheckBox checked={checked} onCheck={handleCheck} />
                 </PrimaryAction>
-                <Text checked={checked} label={todo.name} />
+                <div>
+                    <Text checked={checked} strikethrough>{todo.name}</Text>
+                    {dueDateStr && (
+                        <SecondaryText isPastDueDate={isPastDueDate} checked={checked} strikethrough >
+                        <CustomIcon icon={['far', 'clock']}/> {dueDateStr}
+                        </SecondaryText>)}
+                </div>
                 <SecondaryAction>
-                    <IconButton onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(todo);
-                    }}>
-                        <TrashIcon iconsize={iconsize} icon={['far', 'trash-alt']} />
+                    <IconButton onClick={handleDelete}>
+                        <CustomIcon iconsize={iconsize} icon={['far', 'trash-alt']} />
                     </IconButton>
                 </SecondaryAction>
             </Wrapper>
         )
-    }, [todo, handleJump, iconsize, className, onChange, onDelete, checked]);
+    }, [checked, className, handleClickItem, handleCheck, isPastDueDate, handleDelete, dueDateStr, todo.name, iconsize]);
 }
 
 export default TodoRow;

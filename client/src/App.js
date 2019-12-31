@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core'; 
-import { faCheckSquare, faSquare, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+import { faCheckSquare, faSquare, faTrashAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 import { faSquare as faSolidSquare, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { ModalProvider } from 'styled-react-modal'
@@ -10,7 +10,7 @@ import {auth} from './services';
 import {authReducer} from './reducers';
 import MainPage from './components/MainPage/index';
 
-library.add(faCheckSquare,faSquare,faSolidSquare,faTrashAlt,faUser,faGoogle)
+library.add(faCheckSquare,faSquare,faSolidSquare,faTrashAlt,faUser,faGoogle,faClock)
 
 function App() {
   const [userState, dispatch] = useReducer(authReducer.reducer,authReducer.initialState);

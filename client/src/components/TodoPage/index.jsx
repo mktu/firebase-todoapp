@@ -16,12 +16,12 @@ const Wrapper = styled.div`
 
 const Title = styled.h3`
     text-align : center;
-    margin-bottom : 2rem;
+    margin-bottom : 1rem;
 `;
 const Body = styled.div`
     display : flex;
     justify-content: start;
-    padding : 2rem;
+    padding : 1rem;
 `;
 
 const TodoInput = styled(TextInput)`
@@ -34,9 +34,12 @@ const TodoInput = styled(TextInput)`
 const TodoListPanel = styled(Paper)(({ theme }) => `
     background-color: ${theme.surface};
     font-size : 1.5rem;
+    
 `);
 
 const ToDoList = styled(List)`
+    overflow : scroll;
+    height : 55vh;
 `;
 
 const TodoRow = styled(ToDoRawBase)`
@@ -55,8 +58,11 @@ const TodoPage = () => {
                         value={newItemState.current}
                         onChange={newItemState.handleChange}
                         onEnter={newItemState.handleSubmit}
-                        label='INPUT TODO'
+                        label='Input Todo'
                     />
+                    <div>
+                        menus{/** <TodoMenuItems></TodoMenuItems> */}
+                    </div>
                     <ToDoList items={todos} onSort={handleSort} sorter={sorter}>
                     {
                         useMemo(()=>{

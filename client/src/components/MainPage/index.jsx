@@ -14,12 +14,6 @@ const Wrapper = styled.div(({ theme }) => `
     min-height : 100vh;
 `);
 
-const FooterLayout = styled.div(({ theme }) => `
-    background-color: ${theme.p};
-    color : ${theme.onP};
-`);
-
-
 const MainPage = () => {
     const { userState } = useContext(AuthContext);
     const theme = useContext(ThemeContext);
@@ -35,7 +29,6 @@ const MainPage = () => {
                 ):(
                     <VisitorPage/>
                 )}
-                <FooterLayout theme={theme}>footer</FooterLayout>
             </Wrapper>
         </Router>
     )
