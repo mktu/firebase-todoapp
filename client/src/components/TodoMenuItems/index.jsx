@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 import {TextButton as TextButtonBase} from '../Button';
 
 const Wrapper = styled.div`
@@ -16,10 +17,11 @@ const CustomIcon = styled(FontAwesomeIcon)(({ iconsize }) => `
 `);
 
 const TodoMenuItems = ({ className, handleSort, deleteCompletedList }) => {
+    const { t } = useTranslation();
     return (
         <Wrapper className={className}>
-            <div><TextButton onClick={handleSort}><CustomIcon icon={['fas', 'sort']} iconsize='1rem'/>SORT BY DATE</TextButton></div>
-            <div><TextButton onClick={deleteCompletedList}><CustomIcon icon={['far', 'trash-alt']} iconsize='1rem'/>DELETE COMPLETED TASKS</TextButton></div>
+            <div><TextButton onClick={handleSort}><CustomIcon icon={['fas', 'sort']} iconsize='1rem'/>{t('SortByDate')}</TextButton></div>
+            <div><TextButton onClick={deleteCompletedList}><CustomIcon icon={['far', 'trash-alt']} iconsize='1rem'/>{t('DeleteCompletedTasks')}</TextButton></div>
         </Wrapper>
     );
 }

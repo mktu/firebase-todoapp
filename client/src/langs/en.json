@@ -1,0 +1,14 @@
+{
+    "InputTodo" : "Input Todo",
+    "SortByDate" : "SORT BY DATE",
+    "DeleteCompletedTasks" : "DELETE COMPLETED TASKS",
+    "Title" : "Title",
+    "DueDate" : "Due Date",
+    "Detail" : "Detail",
+    "StartWithAnonymous" : "START WITH ANONUMOUS",
+    "StartWithSignUp" : "START WITH SIGN UP",
+    "ChooseSignInProvider" : "Choose a provider for sign-in",
+    "HeadMessage" : "Simple Todo App",
+    "AppFeature1" : "You can make your data permanent by logging in.",
+    "AppFeature2" : "If you only use it temporarily, you can use it without logging in."
+}

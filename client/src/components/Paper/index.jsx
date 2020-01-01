@@ -7,7 +7,7 @@ const Wrapper = styled.div`
     padding : 1rem;
     box-shadow: 1px 1px 1px 1px rgba(0,0,0,.12);
     ${({ theme }) => `
-        background-color : ${theme.bgcolor};
+        background-color : ${theme.surface};
     `}
 `;
 

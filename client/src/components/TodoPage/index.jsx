@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import TextInput from '../Input';
 import ToDoRawBase from '../TodoRow';
 import TodoDetail from '../TodoDetail';
@@ -51,6 +52,7 @@ const TodoRow = styled(ToDoRawBase)`
 
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
+    const { t } = useTranslation();
     const { 
         newItemState, 
         todoState, 
@@ -69,7 +71,7 @@ const TodoPage = () => {
                         value={newItemState.current}
                         onChange={newItemState.handleChange}
                         onEnter={newItemState.handleSubmit}
-                        label='Input Todo'
+                        label={t('InputTodo')}
                     />
                     <ToDoList items={todos} onSort={handleSort} sorter={sorter} theme={theme}>
                     {

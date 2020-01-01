@@ -1,23 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { ContainedButton } from '../Button';
 import { SigninModal } from '../Modal';
 import { ErrorModal } from '../Modal';
-import { ThemeContext } from '../../contexts';
 import { useVisitorState } from '../../hooks';
+import PaperBase from '../Paper';
+import sample from '../../images/sample.png'
 
-const Wrapper = styled.div(({ theme }) =>`
-    background-color: ${theme.bgcolor};
-`);
+const Wrapper = styled.div`
+    display : flex;
+    align-items : center;
+    justify-content : center;
+`;
 
-const Title = styled.h2`
-    text-align : center;
-    margin-bottom : 2rem;
+const ImageWrapper = styled.div`
+    display : flex;
+    align-items : center;
+    justify-content : center;
+    padding : 1rem;
 `;
 
 const ButtonWrapper = styled.div`
     display : flex;
     justify-content : center;
+`;
+
+const Paper = styled(PaperBase)`
+    padding : 2rem;
 `;
 
 const ActionButton = styled(ContainedButton).attrs({
@@ -29,32 +39,41 @@ const ActionButton = styled(ContainedButton).attrs({
     margin-right : 1rem;
 `;
 
-const VisitorPage = ({ ...props }) => {
-    const theme = useContext(ThemeContext);
-    const {signinModalState, errorModalState} = useVisitorState();
+const VisitorPage = ({ className, ...props }) => {
+    const { t } = useTranslation();
+    const { signinModalState, errorModalState } = useVisitorState();
     return (
-        <Wrapper theme={theme}>
-            <Title>Select mode</Title>
-            <ButtonWrapper>
-                <ActionButton onClick={signinModalState.handleAnonymousLogin}>
-                    START WITH ANONUMOUS
+        <Wrapper className={className}>
+            <Paper>
+                <p>{t('HeadMessage')}</p>
+                <ul>
+                    <li>{t('AppFeature1')}</li>
+                    <li>{t('AppFeature2')}</li>
+                </ul>
+                <ImageWrapper>
+                    <img src={sample} width='500px' alt='sample' />
+                </ImageWrapper>
+                <ButtonWrapper>
+                    <ActionButton onClick={signinModalState.handleAnonymousLogin}>
+                        {t('StartWithAnonymous')}
                     </ActionButton>
-                <ActionButton onClick={signinModalState.show}>
-                    START WITH SIGN UP
+                    <ActionButton onClick={signinModalState.show}>
+                        {t('StartWithSignUp')}
                     </ActionButton>
-            </ButtonWrapper>
+                </ButtonWrapper>
+            </Paper>
             <ErrorModal
                 mainMessage={'Error'}
                 detailMessage={errorModalState.message}
                 isOpen={errorModalState.isOpen}
                 onClose={errorModalState.handleClose}
-                />
+            />
             <SigninModal
-                title='Choose a provider for sign-in'
+                title={t('ChooseSignInProvider')}
                 isOpen={signinModalState.isOpen}
-                onCancel={signinModalState.handleClose}
+                onCancel={signinModalState.hide}
                 onClickGoogle={signinModalState.handleGoogoleLogin}
-                onBackgroundClick={signinModalState.handleClose} />
+                onBackgroundClick={signinModalState.hide} />
         </Wrapper>
     )
 }

@@ -9,6 +9,7 @@ import { ThemeContext, AuthContext } from './contexts/index';
 import {auth} from './services';
 import {authReducer} from './reducers';
 import MainPage from './components/MainPage/index';
+import './services/i18n';
 
 library.add(
   faCheckSquare,

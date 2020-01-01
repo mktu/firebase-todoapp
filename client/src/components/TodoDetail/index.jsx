@@ -2,6 +2,7 @@ import React, { useContext,forwardRef } from 'react';
 import styled from 'styled-components';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../contexts';
 import TextInput from '../Input';
 import Paper from '../Paper';
@@ -71,6 +72,7 @@ const DateCustomInput = forwardRef((props, _ref) =>{
 
 const TodoDetail = ({ className, todo, onChange }) => {
     const theme = useContext(ThemeContext);
+    const {t} = useTranslation();
     const {
         title,
         handleTitleInputChange,
@@ -87,7 +89,7 @@ const TodoDetail = ({ className, todo, onChange }) => {
                 <div>
                     <TitleInput
                         onChange={handleTitleInputChange}
-                        label='Title'
+                        label={t('Title')}
                         value={title}
                         onBlur={handleTitleInputBlur}
                     />
@@ -99,13 +101,13 @@ const TodoDetail = ({ className, todo, onChange }) => {
                             timeIntervals={15}
                             dateFormat="yyyy/MM/dd-h:mm aa"
                             isClearable
-                            customInput={<DateCustomInput label='Due Date' />}
+                            customInput={<DateCustomInput label={t('DueDate')} />}
                             onChange={handleChangeDueDate} />
                     </DateWrapper>
 
                     <Detail
                         onChange={handleDetailInputChange}
-                        label='Detail'
+                        label={t('Detail')}
                         value={detail}
                         onBlur={handleDetailInputBlur}
                     />

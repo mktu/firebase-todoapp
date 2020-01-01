@@ -1,0 +1,14 @@
+{
+    "InputTodo" : "Todoを入力",
+    "SortByDate" : "日付でソート",
+    "DeleteCompletedTasks" : "完了済みタスクを消去",
+    "Title" : "タイトル",
+    "DueDate" : "期日",
+    "Detail" : "詳細",
+    "StartWithAnonymous" : "ログイン無しで始める",
+    "StartWithSignUp" : "ログインして始める",
+    "ChooseSignInProvider" : "認証プロバイダーを選択してください",
+    "HeadMessage" : "シンプルなTODOアプリです。",
+    "AppFeature1" : "ログインすることでデータを永続化することができます。",
+    "AppFeature2" : "一時的に利用するだけであれば、ログイン無しで利用することもできます。"
+}

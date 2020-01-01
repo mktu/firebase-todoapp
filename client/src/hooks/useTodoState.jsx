@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useReducer, useMemo, useCallback } from 'react';
+import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
 import { useParams,useHistory } from "react-router-dom";
 import { db } from '../services';
 import { AuthContext } from '../contexts';

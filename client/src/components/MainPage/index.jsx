@@ -10,7 +10,7 @@ const Wrapper = styled.div(({ theme }) => `
     background-color: ${theme.bgcolor};
     display : grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     min-height : 100vh;
 `);
 

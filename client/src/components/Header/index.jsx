@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextButton as TextButtonBase } from '../Button';
 import { ErrorModal } from '../Modal';
@@ -44,6 +45,7 @@ const UserIcon = styled(FontAwesomeIcon)(({ theme }) => `
 
 const Header = () => {
     const theme = useContext(ThemeContext);
+    const {t} = useTranslation();
     const { signinModalState, errorModalState, user } = useHeaderState();
     
     let menu = null;
@@ -71,7 +73,7 @@ const Header = () => {
                 {user.displayName}
             </div>
             <div>
-                <TextButton onClick={signinModalState.han} >LOG OUT</TextButton>
+                <TextButton onClick={signinModalState.handleLogout} >LOG OUT</TextButton>
             </div>
         </React.Fragment>)
     }
@@ -89,7 +91,7 @@ const Header = () => {
                 onClose={errorModalState.handleClose}
             />
             <SigninModal
-                title={'Choose a provider for log in'}
+                title={t('ChooseSignInProvider')}
                 isOpen={signinModalState.isOpen}
                 onClickGoogle={signinModalState.handleGoogoleLogin}
                 onCancel={signinModalState.hide}
