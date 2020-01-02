@@ -5,8 +5,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Requirement
 
 This project uses firebase's Authentication and Cloud Fire Store. Please sign up for firebase and enable these services.  
-https://firebase.google.com/docs/auth
-https://firebase.google.com/docs/firestore
+https://firebase.google.com/docs/auth  
+https://firebase.google.com/docs/firestore  
 
 ## Usage
 
