@@ -1,13 +1,18 @@
 import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
-import { useParams,useHistory } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+import { useParams, useHistory } from "react-router-dom";
 import { db } from '../services';
 import { AuthContext } from '../contexts';
 import { todoReducer } from '../reducers';
+import { sortByDate } from '../utils';
+import { useErrorState } from '.';
 
-const handleSort = (sortedTodos) =>{
-    db.updateTodos(sortedTodos.map((todo,idx)=>({
+const MaxTodoCount = 32;
+
+const handleSort = (sortedTodos) => {
+    db.updateTodos(sortedTodos.map((todo, idx) => ({
         ...todo,
-        index : idx
+        index: idx
     })))
 }
 
@@ -20,11 +25,14 @@ const sorter = (i1, i2) => {
 
 export default function () {
     const { userState } = useContext(AuthContext);
+    const { t } = useTranslation();
     const { user } = userState;
     const { todoId } = useParams();
     let history = useHistory();
     const [todos, dispatch] = useReducer(todoReducer.reducer, todoReducer.initialState);
     const [inputTodo, setInputTodo] = useState('');
+    const { error, hasError, setError, refresh } = useErrorState();
+
     useEffect(() => {
         const actions = todoReducer.createActions(dispatch);
         actions.init();
@@ -36,7 +44,7 @@ export default function () {
                 actions.removed,
                 user);
         }
-        return ()=>{
+        return () => {
             unsubscribe && unsubscribe();
         }
     }, [user]);
@@ -46,14 +54,21 @@ export default function () {
             setInputTodo(e.target.value);
         },
         handleSubmit: () => {
-            if(inputTodo!==''){
+            if (inputTodo !== '') {
+                if (user.isAnonymous && (todos.length >= MaxTodoCount)) {
+                    setError(new Error(t('LimitOver', {
+                        limit: MaxTodoCount
+                    })));
+                    setInputTodo('');
+                    return;
+                }
                 setInputTodo('');
                 db.addTodo(inputTodo, user);
             }
         },
         current: inputTodo
     };
-    const todoState = useMemo(()=>{
+    const todoState = useMemo(() => {
         return {
             handleChange: (todo) => {
                 db.modifyTodo(todo);
@@ -61,40 +76,36 @@ export default function () {
             handleDelete: (todo) => {
                 db.deleteTodo(todo);
             },
-            handleJump: (todo) =>{
+            handleJump: (todo) => {
                 history.push(todo.id);
             },
         };
-    },[history])
+    }, [history])
 
-    const handleSortByDate = ()=>{
-        const listWithDueDate = todos.filter(todo=>Boolean(todo.dueDate));
-        const listWithoutDueDate = todos.filter(todo=>!Boolean(todo.dueDate));
-        const sorted = listWithDueDate.sort((i1,i2)=>{
-            const i1date = new Date(i1.dueDate);
-            const i2Date = new Date(i2.dueDate);
-            return i1date - i2Date;
-        });
-        const newList = [...sorted,...listWithoutDueDate];
-        db.updateTodos(newList.map((todo,i)=>({
+    const handleSortByDate = () => {
+        const newList = sortByDate(todos);
+        db.updateTodos(newList.map((todo, i) => ({
             ...todo,
-            index : i
+            index: i
         })));
     }
 
-    const deleteCompletedList = () =>{
-        db.deleteTodos(todos.filter(todo=>todo.checked));
+    const deleteCompletedList = () => {
+        db.deleteTodos(todos.filter(todo => todo.checked));
     }
 
-    const selected = todos.find(todo=>todo.id===todoId);
-    return { 
-        newItemState, 
-        todoState, 
-        todos, 
-        handleSort, 
-        sorter, 
-        selected, 
-        handleSortByDate, 
-        deleteCompletedList 
+    const selected = todos.find(todo => todo.id === todoId);
+    return {
+        newItemState,
+        todoState,
+        todos,
+        handleSort,
+        sorter,
+        selected,
+        handleSortByDate,
+        deleteCompletedList,
+        hasError,
+        error,
+        refresh
     };
 }

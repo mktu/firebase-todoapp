@@ -10,5 +10,6 @@
     "ChooseSignInProvider" : "Choose a provider for sign-in",
     "HeadMessage" : "Simple Todo App",
     "AppFeature1" : "You can make your data permanent by logging in.",
-    "AppFeature2" : "If you only use it temporarily, you can use it without logging in."
+    "AppFeature2" : "If you only use it temporarily, you can use it without logging in.",
+    "LimitOver" : "Cannot register more than {{limit}} tasks. Please log in to register a task."
 }

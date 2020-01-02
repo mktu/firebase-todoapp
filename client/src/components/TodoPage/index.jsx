@@ -4,17 +4,18 @@ import { useTranslation } from 'react-i18next';
 import TextInput from '../Input';
 import ToDoRawBase from '../TodoRow';
 import TodoDetail from '../TodoDetail';
-import {List} from '../List';
+import { List } from '../List';
 import { ThemeContext } from '../../contexts';
 import Paper from '../Paper';
 import TodoMenuItemsBase from '../TodoMenuItems';
+import { ErrorModal } from '../Modal';
 import useTodoState from '../../hooks/useTodoState';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div` 
     display : flex;
     flex-direction : column;
     align-items:center;
-`;
+`; // for centerize
 
 const TodoMenuItems = styled(TodoMenuItemsBase)`
     font-size : 1.2rem;
@@ -53,18 +54,21 @@ const TodoRow = styled(ToDoRawBase)`
 const TodoPage = () => {
     const theme = useContext(ThemeContext);
     const { t } = useTranslation();
-    const { 
-        newItemState, 
-        todoState, 
-        todos, 
-        selected, 
-        sorter, 
-        handleSort, 
+    const {
+        newItemState,
+        todoState,
+        todos,
+        selected,
+        sorter,
+        handleSort,
         handleSortByDate,
-        deleteCompletedList
+        deleteCompletedList,
+        hasError,
+        error,
+        refresh
     } = useTodoState();
     return (
-        <Wrapper theme={theme}>
+        <Wrapper>
             <Body>
                 <TodoListPanel theme={theme}>
                     <TodoInput
@@ -74,24 +78,30 @@ const TodoPage = () => {
                         label={t('InputTodo')}
                     />
                     <ToDoList items={todos} onSort={handleSort} sorter={sorter} theme={theme}>
-                    {
-                        useMemo(()=>{
-                            return (todo)=>(
-                                <TodoRow
-                                    iconsize='1rem'
-                                    todo={todo}
-                                    handleJump={todoState.handleJump}
-                                    onChange={todoState.handleChange}
-                                    onDelete={todoState.handleDelete} />
-                            )
-                        },[todoState])
-                    }
+                        {
+                            useMemo(() => {
+                                return (todo) => (
+                                    <TodoRow
+                                        iconsize='1rem'
+                                        todo={todo}
+                                        handleJump={todoState.handleJump}
+                                        onChange={todoState.handleChange}
+                                        onDelete={todoState.handleDelete} />
+                                )
+                            }, [todoState])
+                        }
                     </ToDoList>
-                    <TodoMenuItems handleSort={handleSortByDate} deleteCompletedList={deleteCompletedList}/>
+                    <TodoMenuItems handleSort={handleSortByDate} deleteCompletedList={deleteCompletedList} />
                 </TodoListPanel>
                 <TodoDetail todo={selected} onChange={todoState.handleChange} />
-
             </Body>
+            <ErrorModal
+                isOpen={hasError}
+                mainMessage={'ERROR!'}
+                error={error}
+                onClose={refresh}
+                onBackgroundClick={refresh}
+            />
         </Wrapper>
     )
 }

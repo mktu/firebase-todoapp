@@ -20,6 +20,7 @@ const StyledModal = Modal.styled`
 
 const Title = styled.div`
     padding : 1rem;
+    color : red;
 `;
 const Content = styled.div`
     & > div{
@@ -40,7 +41,8 @@ const TextButton = styled(TextButtonBase).attrs({
     font-size : 1rem;
 `;
 
-const ErrorModal = ({ mainMessage, detailMessage,onClickGoogle, onClose, ...props }) => {
+const ErrorModal = ({ mainMessage, detailMessage : detailMessageBase, error, onClose, ...props }) => {
+    const detailMessage = error ? error.toString() : detailMessageBase;
     return (
         <StyledModal {...props}>
             <Title>{mainMessage}</Title>
